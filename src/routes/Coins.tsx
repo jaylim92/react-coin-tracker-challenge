@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { fetchCoins } from '../api';
 
 const Container = styled.section`
   display: flex;
@@ -42,7 +42,7 @@ const CoinImg = styled.img`
   margin-right: 10px;
 `;
 
-interface CoinInterface {
+interface ICoin {
   id: string;
   name: string;
   symbol: string;
@@ -53,23 +53,9 @@ interface CoinInterface {
 }
 
 function Coins() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [coinData, setCoinData] = useState<CoinInterface[]>([]);
-  const getCoinList = async () => {
-    try {
-      const res = await axios.get('https://api.coinpaprika.com/v1/coins');
-      setCoinData(res.data.slice(0, 100));
-      setIsLoading(false);
-      console.log(coinData);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getCoinList();
-    console.log(coinData);
-  }, []);
+  const { isLoading, data } = useQuery<ICoin[]>(['allCoins'], fetchCoins, {
+    select: (data) => data.slice(0, 100),
+  });
 
   return (
     <Container>
@@ -80,7 +66,7 @@ function Coins() {
         <h1>Loading...</h1>
       ) : (
         <CoinsList>
-          {coinData.map((coin) => (
+          {data?.map((coin) => (
             <Coin key={coin.id}>
               <Link to={`/${coin.id}`} state={{ name: coin.name }}>
                 <CoinImg

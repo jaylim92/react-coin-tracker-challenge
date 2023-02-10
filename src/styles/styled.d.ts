@@ -6,6 +6,6 @@ declare module 'styled-components' {
         bgColors : string
         textColors : string
         btnColor: string
-        
+        accentColor: string
     }
 }

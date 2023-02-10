@@ -1,6 +1,7 @@
 import Router from './Router';
 import { createGlobalStyle } from 'styled-components';
 import { Reset } from 'styled-reset';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const GlobalStyle = createGlobalStyle`
 *{
@@ -9,6 +10,7 @@ const GlobalStyle = createGlobalStyle`
 a {
     text-decoration: none;
     color: ${(props) => props.theme.textColors};
+    color: inherit;
   }
 body{
   background-color: ${(props) => props.theme.bgColors};
@@ -22,6 +24,7 @@ function App() {
       <Reset />
       <GlobalStyle />
       <Router></Router>
+      <ReactQueryDevtools />
     </>
   );
 }
